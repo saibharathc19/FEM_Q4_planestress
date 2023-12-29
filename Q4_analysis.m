@@ -99,6 +99,8 @@ U=[Uf;Uc];
 % PLACING THE DISPLACEMENT AT EVERY NODE IN ASCENDING ORDER AS PER
 % DOF AND IN DISPLACEMENT MATRIX
 Displacement=zeros(DEG*NN,2);
+Displacement_X=zeros(DEG*NN*0.5,2);
+Displacement_Y=zeros(DEG*NN*0.5,2);
 m=1;
 for i=1:1:NN*DEG
     for j=1:1:NN*DEG
@@ -108,6 +110,16 @@ for i=1:1:NN*DEG
             m=m+1;
         end
     end
+end
+kp=1;
+for i=1:2:NN*DEG
+    Displacement_X(kp,:)=Displacement(i,:);
+    kp=kp+1;
+end
+kp=1;
+for i=2:2:NN*DEG
+    Displacement_Y(kp,:)=Displacement(i,:);
+    kp=kp+1;
 end
         
 Rf(:,2)=X*U(:,2);
@@ -125,7 +137,8 @@ end
 %% EVALUATION OF STRESS %%
         
 %         Stress is evaluated at gauss point
-[sigma] = q4elementstress(Element,Node,DEG,NE,NN,Displacement)
+[sigma] = q4elementstress(Element,Node,DEG,NE,NN,Displacement);
+[SE,SE_structure,SE_global] =q4elementstrainenergy(Element,Node,DEG,NE,NN,Displacement,Kel,GStiffness)
         
 
        
